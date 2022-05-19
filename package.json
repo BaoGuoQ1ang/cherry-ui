@@ -1,22 +1,50 @@
 {
-  "name": "cherry-ui",
-  "version": "0.1.0",
-  "private": true,
+  "name": "cherry-vue-ui",
+  "version": "0.1.1",
+  "description": "cherry-ui description",
+  "main": "lib/index.min.js",
+  "module": "lib/index.esm.js",
+  "typings": "lib/index.d.ts",
+  "keyword": "cherry-ui",
+  "license": "MIT",
+  "author": "<18701094030@163.com>",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "build": "yarn build:clean && yarn build:lib && yarn build:esm-bundle && rimraf lib/demo.html",
+    "build:clean": "rimraf lib",
+    "build:lib": "vue-cli-service build --target lib --name index --dest lib packages/index.ts",
+    "build:esm-bundle": "rollup --config ./build/rollup.config.js"
   },
   "dependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "core-js": "^3.6.5",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "rollup-plugin-vue": "^6.0.0",
     "vue": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-typescript": "^8.3.2",
     "@vue/cli-plugin-babel": "~4.5.13",
     "@vue/cli-plugin-typescript": "~4.5.13",
     "@vue/cli-service": "~4.5.13",
     "@vue/compiler-sfc": "^3.0.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "loadsh": "^0.0.4",
+    "postcss": "^8.4.13",
+    "rollup": "^2.73.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-postcss": "^4.0.2",
     "typescript": "~4.1.5"
-  }
+  },
+  "sideEffects": [
+    "packages/style.ts"
+  ]
 }

@@ -1,0 +1,13 @@
+@import '../../style/index';
+@import '../../style/themes/default';
+@cherry-prefix: cherry;
+@schedule-prefix-cls: ~'@{cherry-prefix}-schedule';
+
+.@{schedule-prefix-cls} {
+    width: 700px;
+    height: 420px;
+    border: solid 1px @primary-border-color;
+    &-header {
+        display: flex;
+    }
+}
