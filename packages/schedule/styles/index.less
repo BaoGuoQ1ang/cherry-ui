@@ -5,9 +5,81 @@
 
 .@{schedule-prefix-cls} {
     width: 700px;
-    height: 420px;
-    border: solid 1px @primary-border-color;
+    color: @primary-font-color;
     &-header {
+        height: 38px;
+        padding: 0 12px;
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: solid 1px @primary-border-color;
+        border-bottom: none;
+        border-radius: @primary-border-radius @primary-border-radius 0 0;
+    }
+    &-explain {
+        display: flex;
+        font-size: 12px;
+    }
+    .selected-box {
+        content: '';
+        width: 12px;
+        height: 4px;
+        border-radius: 2px;
+        margin-right: 8px;
+        display: block;
+    }
+    &-h-selected {
+        display: flex;
+        align-items: center;
+        margin-right: 12px;
+        &:before {
+            .selected-box();
+            background-color: @primary-color;
+        }
+    }
+    &-h-selectable {
+        display: flex;
+        align-items: center;
+        &:before {
+            .selected-box();
+            border: 1px solid #dadfe3;
+            background-color: transparent;
+        }
+    }
+    &-calendar {
+        &-twrap {
+            border: solid 1px @primary-border-color;
+            border-radius: 0 0 @primary-border-radius @primary-border-radius;
+        }
+        &-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: @primary-font-size;
+            tr th,
+            tr td {
+                border-top: none;
+                text-align: center;
+                border-right: solid 1px @primary-border-color;
+                border-bottom: solid 1px @primary-border-color;
+                transition: background .2s ease;
+            }
+            tr td:last-child,
+            tr th:last-child {
+                border-right: none;
+            }
+            tbody tr {
+                height: 30px;
+            }
+            tbody tr:last-child td {
+                border-bottom: none;
+            }
+            .week-td {
+                width: 75px;
+            }
+        }
+        &-time:hover {
+            background: #F0F0F0;
+        }
     }
 }
