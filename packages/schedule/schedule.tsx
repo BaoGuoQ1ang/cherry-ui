@@ -1,4 +1,4 @@
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import classNames from '../_util/classNames'
 import prefixCls from '../_util/prefixCls'
 import './styles/index.ts'
@@ -15,11 +15,27 @@ export default defineComponent({
         }
     },
     setup(props) {
+        let startClientX = ref(0)
+        let startClientY = ref(0)
+        let moveClientX = ref(0)
+        let moveClientY = ref(0)
+
+        let left = ref(0)
+        let top = ref(0)
+        let width = ref(0)
+        let height = ref(0)
+        let start = ref(false)
+        
+
+        const tableRef = ref<HTMLElement | null>(null)
+        
         return () => {
+
+            // let tableTop = tableRef.value && tableRef.value
             const classs = classNames({
                 [`${prefixCls}-schedule`]: true
             })
-
+            console.log(tableRef.value && tableRef.value.offsetTop)
             const nodeText = computed(() => {
                 return {
                     selectedText: props.selectedText
@@ -61,6 +77,69 @@ export default defineComponent({
                 return result
             }
 
+            function calHeight(num: number) {
+                num % 30
+            }
+
+            
+            const onMousedown = (event: MouseEvent) => {
+                // console.log(event)
+                start.value = true
+                width.value = 0
+                height.value = 0
+                left.value = event.clientX
+                top.value = event.clientY
+
+                startClientX.value = event.clientX
+                startClientY.value = event.clientY
+                console.log(startClientX.value, startClientY.value)
+            }
+
+            const onMouseup = (event: MouseEvent) => {
+                // console.log(event)
+                start.value = false
+                startClientX.value = 0
+                startClientY.value = 0
+            }
+
+            const onMousemove = (event: MouseEvent) => {
+                // console.log('startClientX: ', startClientX.value + ',' + startClientY.value)
+                if (start.value) {
+                    // console.log('鼠标滑过:', event)
+                    moveClientX.value = event.clientX
+                    moveClientY.value = event.clientY
+                    if (startClientX.value > event.clientX) {
+                        left.value = event.clientX
+                    }
+                    if (startClientY.value > event.clientY) {
+                        top.value = event.clientY
+                    }
+                    width.value = Math.abs(moveClientX.value - startClientX.value)
+                    height.value = Math.abs(moveClientY.value - startClientY.value)
+                    if ((height.value / 30) % 1 !== 0) {
+                        console.log(30 - (height.value % 30))
+                        height.value += 30 - (height.value % 30)
+                    }
+                    // console.log('width: ' + width.value + ' height: ' + height.value)
+                }
+                
+            }
+
+            const style = {
+                width: width.value + 'px',
+                height: height.value + 'px',
+                left: left.value + 'px',
+                top: top.value + 'px',
+                opacity: '0.6'
+            }
+
+            const moveModel = () => {
+                if (start.value) {
+                    return <div v-show={start} class={`${prefixCls}-schedule-rang`} style={style}></div>
+                }
+                return null
+            }
+
             const node = (
                 <div class={`${prefixCls}-schedule`}>
                     <div class={`${prefixCls}-schedule-header`}>
@@ -71,6 +150,8 @@ export default defineComponent({
                         </div>
                     </div>
                     <div class={`${prefixCls}-schedule-calendar`}>
+                        {JSON.stringify(style)}
+                        {moveModel()}
                         <div class={`${prefixCls}-schedule-calendar-twrap`}>
                             <table class={`${prefixCls}-schedule-calendar-table`}>
                                 <thead>
@@ -81,7 +162,7 @@ export default defineComponent({
                                     </tr>
                                     <tr>{ thTime() }</tr>
                                 </thead>
-                                <tbody>
+                                <tbody onMousedown={ onMousedown } onMouseup={ onMouseup } onMousemove={ onMousemove } ref={tableRef}>
                                     { weekNode() }
                                     <tr>
                                         <td colspan="49" class={`${prefixCls}-schedule-calendar-tip`}>
