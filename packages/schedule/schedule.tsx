@@ -35,7 +35,7 @@ export default defineComponent({
             const classs = classNames({
                 [`${prefixCls}-schedule`]: true
             })
-            console.log(tableRef.value && tableRef.value.offsetTop)
+            
             const nodeText = computed(() => {
                 return {
                     selectedText: props.selectedText
@@ -92,7 +92,6 @@ export default defineComponent({
 
                 startClientX.value = event.clientX
                 startClientY.value = event.clientY
-                console.log(startClientX.value, startClientY.value)
             }
 
             const onMouseup = (event: MouseEvent) => {
@@ -117,7 +116,6 @@ export default defineComponent({
                     width.value = Math.abs(moveClientX.value - startClientX.value)
                     height.value = Math.abs(moveClientY.value - startClientY.value)
                     if ((height.value / 30) % 1 !== 0) {
-                        console.log(30 - (height.value % 30))
                         height.value += 30 - (height.value % 30)
                     }
                     // console.log('width: ' + width.value + ' height: ' + height.value)
